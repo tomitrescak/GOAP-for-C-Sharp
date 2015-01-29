@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="GoapSharp/GoapSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="GoapSharp/ActionPlanner.cs">
+    <Files>
+      <File FileName="GoapSharp/Program.cs" Line="54" Column="54" />
+      <File FileName="GoapSharp/ActionPlanner.cs" Line="3" Column="3" />
+      <File FileName="GoapSharp/WorldState.cs" Line="24" Column="24" />
+      <File FileName="GoapSharp/AStar.cs" Line="51" Column="51" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
