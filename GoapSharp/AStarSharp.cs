@@ -1,85 +1,41 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace GoapSharp
 {
+	public class AStarSharpNode {
+		public WorldState ws;		//!< The state of the world at this node.
+		public int costSoFar;				//!< The cost so far.
+		public int heuristicCost;				//!< The heuristic for remaining cost (don't overestimate!)
+		public int costSoFarAndHeurisitcCost;				//!< g+h combined.
+		public string actionname;		//!< How did we get to this node?
+		public WorldState parentws;		//!< Where did we come from?
+		public AStarSharpNode parent;
+		public int depth;
+
+		public override string ToString ()
+		{
+			return string.Format ("[{0} | {1}]: {2}", costSoFar, heuristicCost, actionname);
+		}
+	}
+
 	public class AStarSharp
 	{
-		class Storage {
-			public List<AStarNode> _opened;
-			public List<AStarNode> _closed;
+		public static AStarNode empty;
 
-			internal Storage() {
-				_opened = new List<AStarNode> ();
-				_closed = new List<AStarNode> ();
-			}
-
-			internal AStarNode? FindOpened(AStarNode node) {
-				for (var i = 0; i < _opened.Count; i++) {
-					if (node.Equals (_opened [i])) {
-						return _opened [i];
-					}
-				}
-				return null;
-			}
-
-			internal AStarNode? FindClosed(AStarNode node) {
-				for (var i = 0; i < _closed.Count; i++) {
-					if (node.Equals (_closed [i])) {
-						return _closed [i];
-					}
-				}
-				return null;
-			}
-
-			internal bool HasOpened() {
-				return _opened.Count > 0;
-			}
-
-			internal void RemoveOpened(AStarNode node) {
-				_opened.Remove (node);
-			}
-
-			internal void RemoveClosed(AStarNode node) {
-				_closed.Remove (node);
-			}
-				
-			internal bool IsOpen(AStarNode node) {
-				return _opened.Contains (node);
-			}
-
-			internal bool IsClosed(AStarNode node) {
-				return _closed.Contains (node);
-			}
-
-			internal void AddToOpenList(AStarNode node) {
-				_opened.Add (node);
-			}
-
-			internal void AddToClosedList(AStarNode node) {
-				_closed.Add (node);
-			}
-
-			internal AStarNode RemoveCheapestOpenNode() {
-				var item = _opened.Min ();
-				_opened.Remove (item);
-				return item;
-			}
-		}
-
-		public static List<AStarNode> Plan (ActionPlanner ap, WorldState start, WorldState goal)
+		public static AStarSharpNode[] Plan (ActionPlanner ap, WorldState start, WorldState goal)
 		{
-			var storage = new Storage ();
+			var storage = new ArrayStorage ();
 
-			AStarNode currentNode;
+			AStarSharpNode currentNode = new AStarSharpNode();
 			currentNode.ws = start;
 			currentNode.parentws = start;
 			currentNode.costSoFar = 0; // g
 			currentNode.heuristicCost = CalculateHeuristic( start, goal ); // h
 			currentNode.costSoFarAndHeurisitcCost = currentNode.costSoFar + currentNode.heuristicCost; // f
 			currentNode.actionname = null;
-			currentNode.parent = new WeakReference (null);
+			currentNode.parent = null;
+			currentNode.depth = 1;
 
 			storage.AddToOpenList (currentNode);
 
@@ -100,7 +56,13 @@ namespace GoapSharp
 				if (goal.Equals (currentNode.ws)) {
 					// Console.WriteLine ("Finished with plan");
 					return ReconstructPlan (currentNode);
+					return null;
 				}
+
+//				var actionnames = new string[ActionPlanner.MAXACTIONS ];
+//				var actioncosts = new int[ ActionPlanner.MAXACTIONS ];
+//				var to = new WorldState[ ActionPlanner.MAXACTIONS ];
+//				int numtransitions = ap.GetPossibleTransitions(currentNode.ws, to, actionnames, actioncosts, ActionPlanner.MAXACTIONS );
 
 				var neighbours = ap.GetPossibleTransitions1 (currentNode.ws);
 
@@ -117,37 +79,38 @@ namespace GoapSharp
 					// Console.WriteLine("Cost: {0}  Idx Opened: {1}  Idx Closed: {2}", cost, opened, closed);
 
 					// if neighbor in OPEN and cost less than g(neighbor):
-					if ( opened.HasValue && cost < opened.Value.costSoFar )
+					if ( opened != null && cost < opened.costSoFar )
 					{
 						// Console.WriteLine("OPENED Neighbor: " + opened.Value.ws);
 						// Console.WriteLine("neighbor in OPEN and cost less than g(neighbor)");
 
 						// remove neighbor from OPEN, because new path is better
-						storage.RemoveOpened (opened.Value);
+						storage.RemoveOpened (opened);
 						opened = null;
 					}
 
 					// if neighbor in CLOSED and cost less than g(neighbor):
-					if ( closed.HasValue && cost < closed.Value.costSoFar )
+					if ( closed != null && cost < closed.costSoFar )
 					{
 						// Console.WriteLine("CLOSED Neighbor: " + closed.Value.ws);
 						// Console.WriteLine("neighbor in CLOSED and cost less than g(neighbor)");
 
 						// remove neighbor from CLOSED
-						storage.RemoveClosed (closed.Value);
+						storage.RemoveClosed (closed);
 					}
 
 					// if neighbor not in OPEN and neighbor not in CLOSED:
-					if (!opened.HasValue && !closed.HasValue)
+					if (opened == null && closed == null)
 					{
-						AStarNode nb;
+						AStarSharpNode nb = new AStarSharpNode();
 						nb.ws = cur.ws;
 						nb.costSoFar = cost;
 						nb.heuristicCost = CalculateHeuristic( cur.ws, goal );
 						nb.costSoFarAndHeurisitcCost = nb.costSoFar + nb.heuristicCost;
 						nb.actionname = cur.actionname;
 						nb.parentws = currentNode.ws;
-						nb.parent = new WeakReference (currentNode);
+						nb.parent = currentNode;
+						nb.depth = currentNode.depth + 1;
 						storage.AddToOpenList (nb);
 
 						// Console.WriteLine("NEW OPENED: " + nb.ToString());
@@ -158,21 +121,25 @@ namespace GoapSharp
 		}
 
 		//!< Internal function to reconstruct the plan by tracing from last node to initial node.
-		static List<AStarNode> ReconstructPlan(AStarNode goalnode)
+		static AStarSharpNode[] ReconstructPlan(AStarSharpNode goalnode)
 		{	
-			var plan = new List<AStarNode> ();
+			var plan = new AStarSharpNode[goalnode.depth - 1];
 
-			AStarNode curnode = goalnode;
-			while (!string.IsNullOrEmpty(curnode.actionname))
-			{
-
-				plan.Add (curnode);
-				if (curnode.parent.Target != null) {
-					curnode = (AStarNode)curnode.parent.Target;
-				} else {
-					break;
-				}
+			AStarSharpNode curnode = goalnode;
+			for (var i = 0; i < goalnode.depth - 1; i++) {
+				plan [i] = curnode;
+				curnode = curnode.parent;
 			}
+//			while (!string.IsNullOrEmpty(curnode.actionname))
+//			{
+//
+//				plan.Add (curnode);
+//				if (curnode.parent.Target != null) {
+//					curnode = (AStarNode)curnode.parent.Target;
+//				} else {
+//					break;
+//				}
+//			}
 			return plan;
 		}
 
@@ -189,5 +156,7 @@ namespace GoapSharp
 			return dist;
 		}
 	}
+
+
 }
 

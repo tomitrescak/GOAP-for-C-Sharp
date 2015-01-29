@@ -145,9 +145,9 @@ namespace GoapSharp
 			return -1;
 		}
 
-		public List<AStarNode> GetPossibleTransitions1(WorldState fr)
+		public List<AStarSharpNode> GetPossibleTransitions1(WorldState fr)
 		{
-			var result = new List<AStarNode> ();
+			var result = new List<AStarSharpNode> (10);
 			for ( int i=0; i<this.numactions; ++i )
 			{
 				// see if precondition is met
@@ -156,7 +156,7 @@ namespace GoapSharp
 				bool met = ( ( pre.values & care ) == ( fr.values & care ) );
 				if ( met )
 				{
-					AStarNode node = new AStarNode();
+					AStarSharpNode node = new AStarSharpNode();
 					node.actionname = this.actionNames [i];
 					node.costSoFar = this.act_costs [i];
 					node.ws = ApplyPostConditions(this, i, fr );

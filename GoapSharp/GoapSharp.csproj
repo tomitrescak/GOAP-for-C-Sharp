@@ -40,6 +40,9 @@
     <Compile Include="WorldState.cs" />
     <Compile Include="AStar.cs" />
     <Compile Include="AStarSharp.cs" />
+    <Compile Include="ArrayStorage.cs" />
+    <Compile Include="ListStorage.cs" />
+    <Compile Include="IStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

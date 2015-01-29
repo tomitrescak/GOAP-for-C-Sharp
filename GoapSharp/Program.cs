@@ -61,14 +61,15 @@ namespace GoapSharp
 
 			for (var i = 0; i < 10000; i++) {
 				var plan = AStarSharp.Plan (ap, startState, goal);
+//				for (var j=0; j<plan.Length;j++) {
+//					Console.WriteLine (string.Format("{0}: {1}", j, plan[j]));
+//				}
 			}
 			sw.Stop ();
 			Console.WriteLine ("C# Elapsed: " + sw.ElapsedMilliseconds);
 			sw.Reset();
 
-//			for (var i=0; i<plan.Count;i++) {
-//				Console.WriteLine (string.Format("{0}: {1}", i, plan[i]));
-//			}
+
 
 			sw = new Stopwatch ();
 			sw.Start ();
