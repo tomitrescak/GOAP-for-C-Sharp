@@ -39,8 +39,8 @@ namespace GoapSharp
 		const int MAXOPEN = 1024;	//!< The maximum number of nodes we can store in the opened set.
 		const int MAXCLOS = 1024;	//!< The maximum number of nodes we can store in the closed set.
 
-		static AStarSharpNode[] opened = new AStarSharpNode[ MAXOPEN ];	//!< The set of nodes we should consider.
-		static AStarSharpNode[] closed = new AStarSharpNode[ MAXCLOS ];	//!< The set of nodes we already visited.
+		static AStarNode[] opened = new AStarNode[ MAXOPEN ];	//!< The set of nodes we should consider.
+		static AStarNode[] closed = new AStarNode[ MAXCLOS ];	//!< The set of nodes we already visited.
 
 		static int numOpened = 0;	//!< The nr of nodes in our opened set.
 		static int numClosed = 0;	//!< The nr of nodes in our closed set.
@@ -56,7 +56,7 @@ namespace GoapSharp
 		{
 			// put start in opened list
 			numOpened=0;
-			AStarSharpNode n0 = new AStarSharpNode();
+			AStarNode n0;
 			n0.ws = start;
 			n0.parentws = start;
 			n0.costSoFar = 0;
@@ -86,7 +86,7 @@ namespace GoapSharp
 					}
 				}
 				// remove the node with the lowest rank
-				AStarSharpNode cur = opened[ lowestIdx ];
+				AStarNode cur = opened[ lowestIdx ];
 				if ( numOpened > 0 ) opened[ lowestIdx ] = opened[ numOpened-1 ];
 				numOpened--;
 
@@ -127,7 +127,7 @@ namespace GoapSharp
 					// Console.WriteLine("Processing {0} -> {1}", cur.actionname, actionnames[i]);
 					// Console.WriteLine("State: " + to[i]);
 
-					AStarSharpNode nb = new AStarSharpNode();
+					AStarNode nb;
 					int cost = cur.costSoFar + actioncosts[ i ];
 					int idx_o = idx_in_opened( to[ i ] );
 					int idx_c = idx_in_closed( to[ i ] );
@@ -218,9 +218,9 @@ namespace GoapSharp
 
 
 		//!< Internal function to reconstruct the plan by tracing from last node to initial node.
-		static void reconstruct_plan(ActionPlanner ap, AStarSharpNode goalnode, string[] plan, WorldState[] worldstates, ref int plansize )
+		static void reconstruct_plan(ActionPlanner ap, AStarNode goalnode, string[] plan, WorldState[] worldstates, ref int plansize )
 		{
-			AStarSharpNode curnode = goalnode;
+			AStarNode curnode = goalnode;
 			int idx = plansize - 1;
 			int numsteps=0;
 			while (!string.IsNullOrEmpty(curnode.actionname))
