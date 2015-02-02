@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GoapSharp
 {
-	public class ArrayStorage  {
+	public class ArrayStorage : IStorage  {
 		AStarSharpNode[] _opened;
 		AStarSharpNode[] _closed;
 		int _numOpened;

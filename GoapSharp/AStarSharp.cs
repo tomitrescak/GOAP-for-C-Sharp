@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GoapSharp
 {
-	public class AStarSharpNode {
+	public class AStarSharpNode : IComparable<AStarSharpNode>, IEquatable<AStarSharpNode> {
 		public WorldState ws;		//!< The state of the world at this node.
 		public int costSoFar;				//!< The cost so far.
 		public int heuristicCost;				//!< The heuristic for remaining cost (don't overestimate!)
@@ -12,21 +12,38 @@ namespace GoapSharp
 		public WorldState parentws;		//!< Where did we come from?
 		public AStarSharpNode parent;
 		public int depth;
+	
 
 		public override string ToString ()
 		{
 			return string.Format ("[{0} | {1}]: {2}", costSoFar, heuristicCost, actionname);
 		}
+
+		#region IEquatable implementation
+
+		public bool Equals (AStarSharpNode other)
+		{
+			//return ws.Equals (other.ws);
+			long care = ws.dontcare ^ -1L;
+			return (ws.values & care) == (other.ws.values & care);
+		}
+
+		#endregion
+
+		#region IComparable implementation
+		public int CompareTo (AStarSharpNode other)
+		{
+			return this.costSoFarAndHeurisitcCost.CompareTo(other.costSoFarAndHeurisitcCost);
+		}
+		#endregion
 	}
 
 	public class AStarSharp
 	{
 		public static AStarNode empty;
 
-		public static AStarSharpNode[] Plan (ActionPlanner ap, WorldState start, WorldState goal)
+		public static AStarSharpNode[] Plan (ActionPlanner ap, WorldState start, WorldState goal, IStorage storage)
 		{
-			var storage = new ArrayStorage ();
-
 			AStarSharpNode currentNode = new AStarSharpNode();
 			currentNode.ws = start;
 			currentNode.parentws = start;

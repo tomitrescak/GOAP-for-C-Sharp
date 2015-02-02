@@ -4,16 +4,16 @@ namespace GoapSharp
 {
 	public interface IStorage
 	{
-		AStarNode FindOpened(AStarNode node);
-		AStarNode FindClosed(AStarNode node);
+		AStarSharpNode FindOpened(AStarSharpNode node);
+		AStarSharpNode FindClosed(AStarSharpNode node);
 		bool HasOpened();
-		void RemoveOpened(AStarNode node);
-		void RemoveClosed(AStarNode node);
-		bool IsOpen(AStarNode node);
-		bool IsClosed(AStarNode node);
-		void AddToOpenList(AStarNode node);
-		void AddToClosedList(AStarNode node);
-		AStarNode RemoveCheapestOpenNode();
+		void RemoveOpened(AStarSharpNode node);
+		void RemoveClosed(AStarSharpNode node);
+		bool IsOpen(AStarSharpNode node);
+		bool IsClosed(AStarSharpNode node);
+		void AddToOpenList(AStarSharpNode node);
+		void AddToClosedList(AStarSharpNode node);
+		AStarSharpNode RemoveCheapestOpenNode();
 	}
 }
 

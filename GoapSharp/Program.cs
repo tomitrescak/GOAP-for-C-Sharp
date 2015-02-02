@@ -60,16 +60,27 @@ namespace GoapSharp
 			sw.Start ();
 
 			for (var i = 0; i < 10000; i++) {
-				var plan = AStarSharp.Plan (ap, startState, goal);
+				var plan = AStarSharp.Plan (ap, startState, goal, new ListStorage());
 //				for (var j=0; j<plan.Length;j++) {
 //					Console.WriteLine (string.Format("{0}: {1}", j, plan[j]));
 //				}
 			}
 			sw.Stop ();
-			Console.WriteLine ("C# Elapsed: " + sw.ElapsedMilliseconds);
+			Console.WriteLine ("C# (ListStorage) Elapsed: " + sw.ElapsedMilliseconds);
 			sw.Reset();
 
+			sw = new Stopwatch ();
+			sw.Start ();
 
+			for (var i = 0; i < 10000; i++) {
+				var plan = AStarSharp.Plan (ap, startState, goal, new ArrayStorage());
+				//				for (var j=0; j<plan.Length;j++) {
+				//					Console.WriteLine (string.Format("{0}: {1}", j, plan[j]));
+				//				}
+			}
+			sw.Stop ();
+			Console.WriteLine ("C# (ArraySrorage) Elapsed: " + sw.ElapsedMilliseconds);
+			sw.Reset();
 
 			sw = new Stopwatch ();
 			sw.Start ();

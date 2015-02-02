@@ -4,69 +4,89 @@ using System.Collections.Generic;
 
 namespace GoapSharp
 {
-	public class ListStorage {
-		public List<AStarNode> _opened;
-		public List<AStarNode> _closed;
+	public class ListStorage : IStorage
+	{
+		public List<AStarSharpNode> _opened;
+		public List<AStarSharpNode> _closed;
 
-		internal ListStorage() {
-			_opened = new List<AStarNode> ();
-			_closed = new List<AStarNode> ();
+		public ListStorage ()
+		{
+			_opened = new List<AStarSharpNode> (16);
+			_closed = new List<AStarSharpNode> (16);
 		}
 
-		internal AStarNode FindOpened(AStarNode node) {
+		public AStarSharpNode FindOpened (AStarSharpNode node)
+		{
 			for (var i = 0; i < _opened.Count; i++) {
+//				long care = node.ws.dontcare ^ -1L;
+//				if ((node.ws.values & care) == (_opened[i].ws.values & care)) {
+//					return _closed [i];
+//				}
+
 				if (node.Equals (_opened [i])) {
 					return _opened [i];
 				}
 			}
-			return AStarSharp.empty;
+			return null;
 		}
 
-		internal AStarNode FindClosed(AStarNode node) {
+		public AStarSharpNode FindClosed (AStarSharpNode node)
+		{
 			for (var i = 0; i < _closed.Count; i++) {
+//				long care = node.ws.dontcare ^ -1L;
+//				if ((node.ws.values & care) == (_closed[i].ws.values & care)) {
+//					return _closed [i];
+//				}
 				if (node.Equals (_closed [i])) {
 					return _closed [i];
 				}
+
 			}
-			return AStarSharp.empty;
+			return null;
 		}
 
-		internal bool HasOpened() {
+		public bool HasOpened ()
+		{
 			return _opened.Count > 0;
 		}
 
-		internal void RemoveOpened(AStarNode node) {
+		public void RemoveOpened (AStarSharpNode node)
+		{
 			_opened.Remove (node);
 		}
 
-		internal void RemoveClosed(AStarNode node) {
+		public void RemoveClosed (AStarSharpNode node)
+		{
 			_closed.Remove (node);
 		}
 
-		internal bool IsOpen(AStarNode node) {
+		public bool IsOpen (AStarSharpNode node)
+		{
 			return _opened.Contains (node);
 		}
 
-		internal bool IsClosed(AStarNode node) {
+		public bool IsClosed (AStarSharpNode node)
+		{
 			return _closed.Contains (node);
 		}
 
-		internal void AddToOpenList(AStarNode node) {
+		public void AddToOpenList (AStarSharpNode node)
+		{
 			_opened.Add (node);
 		}
 
-		internal void AddToClosedList(AStarNode node) {
+		public void AddToClosedList (AStarSharpNode node)
+		{
 			_closed.Add (node);
 		}
 
-		internal AStarNode RemoveCheapestOpenNode() {
-			int lowestVal= int.MaxValue;
+		public AStarSharpNode RemoveCheapestOpenNode ()
+		{
+			int lowestVal = int.MaxValue;
 			int lowestIdx = -1;
-			for ( int i=0; i<_opened.Count; i++ )
-			{
-				if ( _opened[ i ].costSoFarAndHeurisitcCost < lowestVal )
-				{
-					lowestVal = _opened[ i ].costSoFarAndHeurisitcCost;
+			for (int i = 0; i < _opened.Count; i++) {
+				if (_opened [i].costSoFarAndHeurisitcCost < lowestVal) {
+					lowestVal = _opened [i].costSoFarAndHeurisitcCost;
 					lowestIdx = i;
 				}
 			}

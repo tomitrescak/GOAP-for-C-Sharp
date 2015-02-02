@@ -1,11 +1,15 @@
 ﻿<Properties StartupItem="GoapSharp/GoapSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GoapSharp/ActionPlanner.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GoapSharp/AStarSharp.cs">
     <Files>
-      <File FileName="GoapSharp/Program.cs" Line="54" Column="54" />
-      <File FileName="GoapSharp/ActionPlanner.cs" Line="3" Column="3" />
-      <File FileName="GoapSharp/WorldState.cs" Line="24" Column="24" />
-      <File FileName="GoapSharp/AStar.cs" Line="51" Column="51" />
+      <File FileName="GoapSharp/Program.cs" Line="33" Column="33" />
+      <File FileName="GoapSharp/ActionPlanner.cs" Line="40" Column="40" />
+      <File FileName="GoapSharp/WorldState.cs" Line="52" Column="52" />
+      <File FileName="GoapSharp/AStar.cs" Line="13" Column="13" />
+      <File FileName="GoapSharp/AStarSharp.cs" Line="6" Column="6" />
+      <File FileName="GoapSharp/ArrayStorage.cs" Line="6" Column="6" />
+      <File FileName="GoapSharp/ListStorage.cs" Line="1" Column="1" />
+      <File FileName="GoapSharp/IStorage.cs" Line="39" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
