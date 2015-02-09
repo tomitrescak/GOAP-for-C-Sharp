@@ -35,7 +35,7 @@ namespace GoapSharp
 
 			Console.WriteLine (ap.Describe ());
 
-			var startState = new WorldState ();
+			var startState = new WorldState (0, -1);
 			startState.Set (ap.FindConditionNameIndex ("enemyvisible"), false);
 			startState.Set (ap.FindConditionNameIndex ("armedwithgun"), true);
 			startState.Set (ap.FindConditionNameIndex ("weaponloaded"), false);
@@ -47,7 +47,7 @@ namespace GoapSharp
 
 			ap.SetCost ("detonatebomb", 1000);	// make suicide more expensive than shooting.
 
-			var goal = new WorldState ();
+			var goal = new WorldState (0, -1);
 			goal.Set (ap.FindConditionNameIndex ("enemyalive"), false);
 			goal.Set (ap.FindConditionNameIndex ("alive"), true);
 			//goap_worldstate_set( &ap, &goal, "alive", true ); // add this to avoid suicide actions in plan.
@@ -108,6 +108,9 @@ namespace GoapSharp
 ////			{
 ////				Console.WriteLine (string.Format("{0}: {1} - {2}", i, plan[i], states[i]));
 ////			}
+/// 
+
+		    Console.ReadKey();
 		}
 	}
 }

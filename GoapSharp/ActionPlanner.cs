@@ -45,8 +45,8 @@ namespace GoapSharp
 				this.actionNames [i] = null;
 				this.act_costs [i] = 0;
 
-				this.preConditions [i] = new WorldState ();
-				this.postConditions [i] = new WorldState ();
+				this.preConditions [i] = new WorldState (0, -1);
+				this.postConditions [i] = new WorldState (0, -1);
 			}
 		}
 

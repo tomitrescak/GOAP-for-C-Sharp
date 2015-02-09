@@ -3,15 +3,17 @@ using System.Text;
 
 namespace GoapSharp
 {
-	public struct WorldState : IEquatable<WorldState>
-	{
-		public long values = 0;
-		public long dontcare = -1;
 
-//		public WorldState() {
-//			this.values = 0;
-//			this.dontcare = -1;
-//		}
+    public struct WorldState : IEquatable<WorldState>
+	{
+		public long values;
+		public long dontcare;
+
+        public WorldState(long values, long dontcare)
+        {
+            this.values = values;
+            this.dontcare = dontcare;
+        }
 
 		#region IEquatable implementation
 

@@ -4,12 +4,12 @@ using System.Linq;
 namespace GoapSharp
 {
 	public class AStarSharpNode : IComparable<AStarSharpNode>, IEquatable<AStarSharpNode> {
-		public WorldState ws;		//!< The state of the world at this node.
+		public WorldState ws = new WorldState(0, -1);		//!< The state of the world at this node.
 		public int costSoFar;				//!< The cost so far.
 		public int heuristicCost;				//!< The heuristic for remaining cost (don't overestimate!)
 		public int costSoFarAndHeurisitcCost;				//!< g+h combined.
 		public string actionname;		//!< How did we get to this node?
-		public WorldState parentws;		//!< Where did we come from?
+		public WorldState parentws = new WorldState(0, -1);		//!< Where did we come from?
 		public AStarSharpNode parent;
 		public int depth;
 	
